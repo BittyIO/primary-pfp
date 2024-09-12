@@ -44,6 +44,3 @@ forge script --broadcast -vvvv --rpc-url {rpc_url} \
 |Ethereum (Goerli)|[0x000000000374800E799771196BF826cb7e7511a2](https://goerli.etherscan.io/address/0x000000000374800E799771196BF826cb7e7511a2)|
 
 If you'd like to get the Primary on another EVM chain, anyone in the community can deploy to the same address and make a PR to add link here.
-
-# Thanks for the innovators
-This project is inspired by [Primary ENS Name](https://app.ens.domains/faq#what-is-a-primary-ens-name-record), [ForeverPunk](https://twitter.com/ForeverpunksCom) and [delegate.cash](https://delegate.cash).
