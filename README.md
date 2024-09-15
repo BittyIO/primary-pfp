@@ -16,7 +16,14 @@ forge test
 forge test --gas-report
 ```
 
-- get salt by [create2crunch](https://github.com/0age/create2crunch) and change it in [deploy script](https://github.com/ForeverPFP/primary-pfp-contract/blob/main/script/deploy.s.sol#L23)
+- format code
+install [prettier-solidity](https://github.com/prettier-solidity/prettier-plugin-solidity)
+
+```
+npx prettier --write --plugin=prettier-plugin-solidity 'contracts/**/*.sol'
+```
+
+- get salt by [create2crunch](https://github.com/0age/create2crunch) and change it in [deploy script](https://github.com/BittyIO/Primary-PFP/blob/main/script/deploy.s.sol#L23)
 
 
 - deploy and verify in etherscan
@@ -29,7 +36,7 @@ forge script --broadcast -vvvv --rpc-url {rpc_url} \
 ```
 - initialize with delegate cash address
 ```
-0x00000000000076A84feF008CDAbe6409d2FE638B
+0x00000000000000447e69651d841bd8d104bed493
 ```
 
 

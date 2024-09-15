@@ -20,7 +20,7 @@ interface ImmutableCreate2Factory {
 contract Deploy is Script {
     ImmutableCreate2Factory immutable factory = ImmutableCreate2Factory(0x0000000000FFe8B47B3e2130213B802212439497);
     bytes initCode = type(PrimaryPFP).creationCode;
-    bytes32 salt = 0x0000000000000000000000000000000000000000327b831546a32001f5db6df9;
+    bytes32 salt = 0x000000000000000000000000000000000000000011172debacad70000003fe2f;
 
     function run() external {
         vm.startBroadcast();

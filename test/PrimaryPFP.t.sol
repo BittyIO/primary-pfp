@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: CC0-1.0
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.21;
 
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
@@ -27,12 +27,6 @@ contract PrimaryPFPTest is Test {
         address indexed contract_,
         uint256 tokenId
     );
-
-    // @notice Emitted when a new PFP collection user set primary PFP.
-    event CollectionAdded(address indexed contract_);
-
-    // @notice Emitted when last user from one collection remove primary PFP.
-    event CollectionRemoved(address indexed contract_);
 
     DelegationRegistry dc;
     PrimaryPFP public ppfp;
@@ -146,7 +140,7 @@ contract PrimaryPFPTest is Test {
 
         dc.delegateForToken(delegate, testPFPAddress, 0, true);
         assertTrue(
-            dc.checkDelegateForToken(delegate, msg.sender, testPFPAddress, 0)
+            dc.checkDelegateForERC721(delegate, msg.sender, testPFPAddress, 0)
         );
 
         vm.prank(delegate);
