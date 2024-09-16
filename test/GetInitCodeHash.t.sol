@@ -7,16 +7,14 @@ import "ds-test/test.sol";
 import "../src/PrimaryPFP.sol";
 
 contract GetInitCodeHashTest is Test {
-  
     PrimaryPFP public ppfp;
-  
+
     function setUp() public {
         ppfp = new PrimaryPFP();
     }
 
-    function testGetInitCodeHash() public {
+    function testGetInitCodeHash() public view {
         bytes memory bytecode = type(PrimaryPFP).creationCode;
         console.logBytes32(keccak256(abi.encodePacked(bytecode)));
     }
-
 }

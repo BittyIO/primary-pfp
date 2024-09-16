@@ -14,10 +14,7 @@ contract TestPFP is Ownable, ERC721Enumerable {
     uint256 public collectionLimit;
     mapping(address => uint256) public mintCounts;
 
-    constructor(
-        string memory name,
-        string memory symbol
-    ) Ownable() ERC721(name, symbol) {
+    constructor(string memory name, string memory symbol) Ownable() ERC721(name, symbol) {
         baseURI = "https://MintableERC721/";
         collectionLimit = 10000;
     }

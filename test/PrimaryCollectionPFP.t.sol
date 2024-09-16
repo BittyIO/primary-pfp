@@ -4,32 +4,21 @@ pragma solidity ^0.8.21;
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 import "ds-test/test.sol";
+
+import "../lib/delegate-registry/src/DelegateRegistry.sol";
+
 import "../src/PrimaryPFP.sol";
 import "../src/IPrimaryPFP.sol";
 import "../src/TestPFP.sol";
-import "../lib/delegate-cash/DelegationRegistry.sol";
 
 contract PrimaryCollectionPFPTest is Test {
-  
-    event CollectionPrimarySet(
-        address indexed to,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event CollectionPrimarySet(address indexed to, address indexed contract_, uint256 tokenId);
 
-    event CollectionPrimarySetByDelegateCash(
-        address indexed to,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event CollectionPrimarySetByDelegateCash(address indexed to, address indexed contract_, uint256 tokenId);
 
-    event CollectionPrimaryRemoved(
-        address indexed from,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event CollectionPrimaryRemoved(address indexed from, address indexed contract_, uint256 tokenId);
 
-    DelegationRegistry dc;
+    DelegateRegistry dc;
     PrimaryPFP public ppfp;
     TestPFP public testPFP;
     TestPFP public testPFP1;
@@ -38,9 +27,10 @@ contract PrimaryCollectionPFPTest is Test {
     address public delegate;
     address contract_;
     uint256 tokenId;
+    bytes32 rights;
 
     function setUp() public {
-        dc = new DelegationRegistry();
+        dc = new DelegateRegistry();
         ppfp = new PrimaryPFP();
         ppfp.initialize(address(dc));
         testPFP = new TestPFP("Test PFP", "TPFP");
@@ -50,6 +40,7 @@ contract PrimaryCollectionPFPTest is Test {
         delegate = makeAddr("delegate");
         vm.prank(msg.sender);
         testPFP.mint(0);
+        rights = bytes32(0);
     }
 
     function _setCollectionPrimaryPFP(uint256 _tokenId) internal {
@@ -66,7 +57,7 @@ contract PrimaryCollectionPFPTest is Test {
         _setCollectionPrimaryPFP(0);
         vm.expectRevert("duplicated set");
         _setCollectionPrimaryPFP(0);
-    }    
+    }
 
     function testGetPrimaryCollectionEmpty() public {
         tokenId = ppfp.getCollectionPrimary(msg.sender, contract_);
@@ -79,7 +70,7 @@ contract PrimaryCollectionPFPTest is Test {
         vm.prank(msg.sender);
         tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);
         assertEq(tokenId, 0);
-    }    
+    }
 
     function testEventForSetPrimaryCollection() public {
         vm.prank(msg.sender);
@@ -96,10 +87,8 @@ contract PrimaryCollectionPFPTest is Test {
     function testSetPrimaryCollectionPFPByDelegateCashToken() public {
         vm.prank(msg.sender);
 
-        dc.delegateForToken(delegate, testPFPAddress, 0, true);
-        assertTrue(
-            dc.checkDelegateForToken(delegate, msg.sender, testPFPAddress, 0)
-        );
+        dc.delegateERC721(delegate, testPFPAddress, 0, rights, true);
+        assertTrue(dc.checkDelegateForERC721(delegate, msg.sender, testPFPAddress, 0, rights));
 
         vm.prank(delegate);
         emit CollectionPrimarySetByDelegateCash(msg.sender, testPFPAddress, 0);
@@ -112,10 +101,8 @@ contract PrimaryCollectionPFPTest is Test {
     function testSetPrimaryCollectionPFPByDelegateCashContract() public {
         vm.prank(msg.sender);
 
-        dc.delegateForContract(delegate, testPFPAddress, true);
-        assertTrue(
-            dc.checkDelegateForContract(delegate, msg.sender, testPFPAddress)
-        );
+        dc.delegateContract(delegate, testPFPAddress, rights, true);
+        assertTrue(dc.checkDelegateForContract(delegate, msg.sender, testPFPAddress, rights));
 
         vm.prank(delegate);
         ppfp.setCollectionPrimaryByDelegateCash(testPFPAddress, 0);
@@ -127,8 +114,8 @@ contract PrimaryCollectionPFPTest is Test {
     function testSetPrimaryPFPByDelegateCashAll() public {
         vm.prank(msg.sender);
 
-        dc.delegateForAll(delegate, true);
-        assertTrue(dc.checkDelegateForAll(delegate, msg.sender));
+        dc.delegateAll(delegate, rights, true);
+        assertTrue(dc.checkDelegateForAll(delegate, msg.sender, rights));
 
         vm.prank(delegate);
         ppfp.setCollectionPrimaryByDelegateCash(testPFPAddress, 0);
@@ -148,7 +135,7 @@ contract PrimaryCollectionPFPTest is Test {
         _setCollectionPrimaryPFP(1);
 
         vm.prank(msg.sender);
-	assertTrue(ppfp.hasCollectionPrimary(msg.sender, testPFPAddress));
+        assertTrue(ppfp.hasCollectionPrimary(msg.sender, testPFPAddress));
 
         vm.prank(msg.sender);
         tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);
@@ -156,17 +143,17 @@ contract PrimaryCollectionPFPTest is Test {
 
         _setCollectionPrimaryPFP(0);
 
-	tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);
+        tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);
         assertEq(tokenId, 0);
 
-	assertTrue(ppfp.hasCollectionPrimary(msg.sender, testPFPAddress));
+        assertTrue(ppfp.hasCollectionPrimary(msg.sender, testPFPAddress));
     }
 
     function testSetCollectionOverrideBySameOwner() public {
         _setCollectionPrimaryPFP(0);
 
-	tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);	
-        assertEq(tokenId, 0);	
+        tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);
+        assertEq(tokenId, 0);
 
         vm.prank(msg.sender);
         testPFP.mint(1);
@@ -197,7 +184,7 @@ contract PrimaryCollectionPFPTest is Test {
         IERC721(testPFPAddress).transferFrom(delegate, msg.sender, 1);
 
         assertEq(IERC721(testPFPAddress).ownerOf(1), msg.sender);
-	
+
         vm.expectEmit(true, true, true, true);
         emit CollectionPrimaryRemoved(msg.sender, testPFPAddress, 0);
 
@@ -208,9 +195,9 @@ contract PrimaryCollectionPFPTest is Test {
         emit CollectionPrimarySet(msg.sender, testPFPAddress, 1);
 
         _setCollectionPrimaryPFP(1);
-	
+
         vm.prank(msg.sender);
-	
+
         tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);
         assertEq(tokenId, 1);
     }
@@ -218,7 +205,7 @@ contract PrimaryCollectionPFPTest is Test {
     function testSetOverrideByNewOwner() public {
         _setCollectionPrimaryPFP(0);
 
-        tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);	
+        tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);
         assertEq(tokenId, 0);
 
         vm.prank(msg.sender);
@@ -245,8 +232,8 @@ contract PrimaryCollectionPFPTest is Test {
         _setCollectionPrimaryPFP(1);
 
         vm.prank(msg.sender);
-	tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);	
-        assertEq(tokenId, 1);	
+        tokenId = ppfp.getCollectionPrimary(msg.sender, testPFPAddress);
+        assertEq(tokenId, 1);
     }
 
     function testRemoveFromWrongSender() public {
@@ -272,7 +259,6 @@ contract PrimaryCollectionPFPTest is Test {
         vm.prank(msg.sender);
         tokenId = ppfp.getCollectionPrimary(msg.sender, contract_);
         assertEq(tokenId, 0);
-	assertFalse(ppfp.hasCollectionPrimary(msg.sender, contract_));
+        assertFalse(ppfp.hasCollectionPrimary(msg.sender, contract_));
     }
-
 }

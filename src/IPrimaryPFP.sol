@@ -12,46 +12,22 @@ interface IPrimaryPFP {
     }
 
     // @notice Emitted when a primary PFP set for the owner.
-    event PrimarySet(
-        address indexed to,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event PrimarySet(address indexed to, address indexed contract_, uint256 tokenId);
 
     // @notice Emitted when a primary collection PFP set for the owner.
-    event CollectionPrimarySet(
-        address indexed to,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event CollectionPrimarySet(address indexed to, address indexed contract_, uint256 tokenId);
 
     // @notice Emitted when a primary PFP set from delegate.cash.
-    event PrimarySetByDelegateCash(
-        address indexed to,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event PrimarySetByDelegateCash(address indexed to, address indexed contract_, uint256 tokenId);
 
     // @notice Emitted when a primary collection PFP set from delegate.cash.
-    event CollectionPrimarySetByDelegateCash(
-        address indexed to,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event CollectionPrimarySetByDelegateCash(address indexed to, address indexed contract_, uint256 tokenId);
 
     // @notice Emitted when a primary PFP removed.
-    event PrimaryRemoved(
-        address indexed from,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event PrimaryRemoved(address indexed from, address indexed contract_, uint256 tokenId);
 
     // @notice Emitted when a primary collection PFP removed.
-    event CollectionPrimaryRemoved(
-        address indexed from,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event CollectionPrimaryRemoved(address indexed from, address indexed contract_, uint256 tokenId);
 
     /**
      * @notice Set primary PFP for an address.
@@ -78,10 +54,7 @@ interface IPrimaryPFP {
      * @param contract_ The collection address of the PFP
      * @param tokenId The tokenId of the PFP
      */
-    function setPrimaryByDelegateCash(
-        address contract_,
-        uint256 tokenId
-    ) external;
+    function setPrimaryByDelegateCash(address contract_, uint256 tokenId) external;
 
     /**
      * @notice Set collection primary PFP for an address from a delegated address from delegate.cash.
@@ -90,10 +63,7 @@ interface IPrimaryPFP {
      * @param contract_ The collection address of the PFP
      * @param tokenId The tokenId of the PFP
      */
-    function setCollectionPrimaryByDelegateCash(
-        address contract_,
-        uint256 tokenId
-    ) external;
+    function setCollectionPrimaryByDelegateCash(address contract_, uint256 tokenId) external;
 
     /**
      * @notice Remove the primary PFP setting.
@@ -111,10 +81,7 @@ interface IPrimaryPFP {
      * @param contract_ The collection address of the PFP
      * @param tokenId The tokenId of the PFP
      */
-    function removeCollectionPrimary(
-        address contract_,
-        uint256 tokenId
-    ) external;
+    function removeCollectionPrimary(address contract_, uint256 tokenId) external;
 
     /**
      * @notice Get primary PFP for an address.
@@ -131,10 +98,7 @@ interface IPrimaryPFP {
      * @param addr The address for querying collection primary PFP
      * @param contract_ The collection address of the PFP
      */
-    function hasCollectionPrimary(
-        address addr,
-        address contract_
-    ) external view returns (bool);
+    function hasCollectionPrimary(address addr, address contract_) external view returns (bool);
 
     /**
      * @notice Get collection primary PFP id for an address.
@@ -143,10 +107,7 @@ interface IPrimaryPFP {
      * @param addr The address for querying primary PFP
      * @param contract_ The collection address of the PFP
      */
-    function getCollectionPrimary(
-        address addr,
-        address contract_
-    ) external view returns (uint256);
+    function getCollectionPrimary(address addr, address contract_) external view returns (uint256);
 
     /**
      * @notice Get primary PFPs for an array of addresses.
@@ -154,9 +115,7 @@ interface IPrimaryPFP {
      *
      * @param addrs The addresses for querying primary PFP
      */
-    function getPrimaries(
-        address[] calldata addrs
-    ) external view returns (PFP[] memory);
+    function getPrimaries(address[] calldata addrs) external view returns (PFP[] memory);
 
     /**
      * @notice Get owner of primary PFP.
@@ -165,8 +124,5 @@ interface IPrimaryPFP {
      * @param contract_ The collection address of the PFP
      * @param tokenId The tokenId of the PFP
      */
-    function getPrimaryAddress(
-        address contract_,
-        uint256 tokenId
-    ) external view returns (address);
+    function getPrimaryAddress(address contract_, uint256 tokenId) external view returns (address);
 }

@@ -7,28 +7,16 @@ import "ds-test/test.sol";
 import "../src/PrimaryPFP.sol";
 import "../src/IPrimaryPFP.sol";
 import "../src/TestPFP.sol";
-import "../lib/delegate-cash/DelegationRegistry.sol";
+import "../lib/delegate-registry/src/DelegateRegistry.sol";
 
 contract PrimaryPFPTest is Test {
-    event PrimarySet(
-        address indexed to,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event PrimarySet(address indexed to, address indexed contract_, uint256 tokenId);
 
-    event PrimarySetByDelegateCash(
-        address indexed to,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event PrimarySetByDelegateCash(address indexed to, address indexed contract_, uint256 tokenId);
 
-    event PrimaryRemoved(
-        address indexed from,
-        address indexed contract_,
-        uint256 tokenId
-    );
+    event PrimaryRemoved(address indexed from, address indexed contract_, uint256 tokenId);
 
-    DelegationRegistry dc;
+    DelegateRegistry dc;
     PrimaryPFP public ppfp;
     TestPFP public testPFP;
     TestPFP public testPFP1;
@@ -37,9 +25,10 @@ contract PrimaryPFPTest is Test {
     address public delegate;
     address contract_;
     uint256 tokenId;
+    bytes32 rights;
 
     function setUp() public {
-        dc = new DelegationRegistry();
+        dc = new DelegateRegistry();
         ppfp = new PrimaryPFP();
         ppfp.initialize(address(dc));
         testPFP = new TestPFP("Test PFP", "TPFP");
@@ -49,6 +38,7 @@ contract PrimaryPFPTest is Test {
         delegate = makeAddr("delegate");
         vm.prank(msg.sender);
         testPFP.mint(0);
+        rights = bytes32(0);
     }
 
     function _setPrimaryPFP(uint256 _tokenId) internal {
@@ -138,10 +128,8 @@ contract PrimaryPFPTest is Test {
     function testSetPrimaryPFPByDelegateCashToken() public {
         vm.prank(msg.sender);
 
-        dc.delegateForToken(delegate, testPFPAddress, 0, true);
-        assertTrue(
-            dc.checkDelegateForERC721(delegate, msg.sender, testPFPAddress, 0)
-        );
+        dc.delegateERC721(delegate, testPFPAddress, 0, rights, true);
+        assertTrue(dc.checkDelegateForERC721(delegate, msg.sender, testPFPAddress, 0, rights));
 
         vm.prank(delegate);
         emit PrimarySetByDelegateCash(msg.sender, testPFPAddress, 0);
@@ -159,10 +147,8 @@ contract PrimaryPFPTest is Test {
     function testSetPrimaryPFPByDelegateCashContract() public {
         vm.prank(msg.sender);
 
-        dc.delegateForContract(delegate, testPFPAddress, true);
-        assertTrue(
-            dc.checkDelegateForContract(delegate, msg.sender, testPFPAddress)
-        );
+        dc.delegateContract(delegate, testPFPAddress, rights, true);
+        assertTrue(dc.checkDelegateForContract(delegate, msg.sender, testPFPAddress, rights));
 
         vm.prank(delegate);
         ppfp.setPrimaryByDelegateCash(testPFPAddress, 0);
@@ -179,8 +165,8 @@ contract PrimaryPFPTest is Test {
     function testSetPrimaryPFPByDelegateCashAll() public {
         vm.prank(msg.sender);
 
-        dc.delegateForAll(delegate, true);
-        assertTrue(dc.checkDelegateForAll(delegate, msg.sender));
+        dc.delegateAll(delegate, rights, true);
+        assertTrue(dc.checkDelegateForAll(delegate, msg.sender, rights));
 
         vm.prank(delegate);
         ppfp.setPrimaryByDelegateCash(testPFPAddress, 0);
@@ -367,5 +353,4 @@ contract PrimaryPFPTest is Test {
         assertEq(IERC721(testPFPAddress).ownerOf(0), delegate);
         assertTrue(addr != delegate);
     }
-
 }
