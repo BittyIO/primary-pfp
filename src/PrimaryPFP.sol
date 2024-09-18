@@ -2,9 +2,12 @@
 pragma solidity ^0.8.21;
 
 import {IPrimaryPFP} from "./IPrimaryPFP.sol";
+import {ICollectionPrimaryPFP} from "./ICollectionPrimaryPFP.sol";
+import {ICollectionVerification} from "./ICollectionVerification.sol";
 import {Initializable} from "../lib/openzeppelin-contracts/contracts/proxy/utils/Initializable.sol";
 import {ERC165} from "../lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol";
 import {IERC721} from "../lib/openzeppelin-contracts/contracts/token/ERC721/IERC721.sol";
+import {Ownable} from "../lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 
 /**
  * @title Set primary PFP by binding a PFP to an address like primary ENS.
@@ -30,7 +33,7 @@ interface DelegateCashInterface {
     ) external view returns (bool);
 }
 
-contract PrimaryPFP is IPrimaryPFP, ERC165, Initializable {
+contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerification, Ownable, ERC165, Initializable {
     // keccak256(abi.encode(collection, tokenId)) => ownerAddress
     mapping(bytes32 => address) private pfpOwners;
     // ownerAddress => PFPStruct
@@ -47,6 +50,8 @@ contract PrimaryPFP is IPrimaryPFP, ERC165, Initializable {
     // ownerAddress => mapping(collection_contract_, id)
     mapping(address => mapping(address => uint256)) private collectionPrimaryPFPs;
 
+    mapping(address => bool) private verifications;
+
     DelegateCashInterface private dc;
 
     /**
@@ -60,11 +65,58 @@ contract PrimaryPFP is IPrimaryPFP, ERC165, Initializable {
         dc = DelegateCashInterface(dcAddress);
     }
 
+    // Primary PFP functions
     function setPrimary(address contract_, uint256 tokenId) external override {
         address tokenOwner = IERC721(contract_).ownerOf(tokenId);
         require(tokenOwner == msg.sender, "msg.sender is not the owner");
         _set(contract_, tokenId, false);
         emit PrimarySet(msg.sender, contract_, tokenId);
+    }
+
+    function setPrimaryByDelegateCash(address contract_, uint256 tokenId) external override {
+        _setPrimaryByDelegateCash(contract_, tokenId, false);
+    }
+
+    function removePrimary(address contract_, uint256 tokenId) external override {
+        address owner = IERC721(contract_).ownerOf(tokenId);
+        require(owner == msg.sender, "msg.sender is not the owner");
+        bytes32 pfpHash = _pfpKey(contract_, tokenId);
+        address boundAddress = pfpOwners[pfpHash];
+        require(boundAddress != address(0), "primary PFP not set");
+
+        emit PrimaryRemoved(boundAddress, contract_, tokenId);
+        delete pfpOwners[pfpHash];
+        delete primaryPFPs[boundAddress];
+    }
+
+    function getPrimary(address addr) external view override returns (PFP memory) {
+        PFP memory pfp = primaryPFPs[addr];
+        if (pfp.contract_ == address(0)) {
+            return pfp;
+        }
+        pfp.isCollectionVerified = verifications[pfp.contract_];
+        return pfp;
+    }
+
+    function getPrimaries(address[] calldata addrs) external view returns (PFP[] memory) {
+        uint256 length = addrs.length;
+        PFP[] memory result = new PFP[](length);
+        for (uint256 i; i < length; ) {
+            result[i] = primaryPFPs[addrs[i]];
+            unchecked {
+                ++i;
+            }
+        }
+        return result;
+    }
+
+    function getPrimaryAddress(address contract_, uint256 tokenId) external view override returns (address) {
+        return pfpOwners[_pfpKey(contract_, tokenId)];
+    }
+
+    // Collection primary functions
+    function setCollectionPrimaryByDelegateCash(address contract_, uint256 tokenId) external override {
+        _setPrimaryByDelegateCash(contract_, tokenId, true);
     }
 
     function setCollectionPrimary(address contract_, uint256 tokenId) external override {
@@ -74,12 +126,57 @@ contract PrimaryPFP is IPrimaryPFP, ERC165, Initializable {
         emit CollectionPrimarySet(msg.sender, contract_, tokenId);
     }
 
-    function setPrimaryByDelegateCash(address contract_, uint256 tokenId) external override {
-        _setPrimaryByDelegateCash(contract_, tokenId, false);
+    function removeCollectionPrimary(address contract_, uint256 tokenId) external override {
+        address owner = IERC721(contract_).ownerOf(tokenId);
+        require(owner == msg.sender, "msg.sender is not the owner");
+        bytes32 pfpHash = _pfpKey(contract_, tokenId);
+        address boundAddress = collectionPFPOwners[pfpHash];
+        require(boundAddress != address(0), "collection primary PFP not set");
+        emit CollectionPrimaryRemoved(boundAddress, contract_, tokenId);
+        delete collectionPFPOwners[pfpHash];
+        delete collectionPrimaryPFPs[boundAddress][contract_];
     }
 
-    function setCollectionPrimaryByDelegateCash(address contract_, uint256 tokenId) external override {
-        _setPrimaryByDelegateCash(contract_, tokenId, true);
+    function hasCollectionPrimary(address addr, address contract_) external view override returns (bool) {
+        return
+            collectionPrimaryPFPs[addr][contract_] != 0 ||
+            collectionPrimaryPFPIdZero[_collectionPFPKey(addr, contract_)];
+    }
+
+    function getCollectionPrimary(address addr, address contact_) external view override returns (uint256) {
+        return collectionPrimaryPFPs[addr][contact_];
+    }
+
+    // Collection verification functions
+    function addVerification(address[] calldata contracts) external override onlyOwner {
+        uint contractsLength = contracts.length;
+        for (uint i = 0; i < contractsLength; i++) {
+            address contract_ = contracts[i];
+            verifications[contract_] = true;
+            emit CollectionVerified(contract_);
+        }
+    }
+
+    function removeVerification(address[] calldata contracts) external override onlyOwner {
+        uint contractsLength = contracts.length;
+        for (uint i = 0; i < contractsLength; i++) {
+            address contract_ = contracts[i];
+            verifications[contract_] = false;
+            emit CollectionVerificationRemoved(contract_);
+        }
+    }
+
+    function isCollectionVerified(address contract_) external view override returns (bool) {
+        return verifications[contract_];
+    }
+
+    // internal functions
+    function _pfpKey(address collection, uint256 tokenId) internal pure virtual returns (bytes32) {
+        return keccak256(abi.encodePacked(collection, tokenId));
+    }
+
+    function _collectionPFPKey(address owner, address collection) internal pure virtual returns (bytes32) {
+        return keccak256(abi.encodePacked(owner, collection));
     }
 
     function _setPrimaryByDelegateCash(address contract_, uint256 tokenId, bool isCollection) internal {
@@ -110,7 +207,7 @@ contract PrimaryPFP is IPrimaryPFP, ERC165, Initializable {
                 emit PrimaryRemoved(msg.sender, pfp.contract_, pfp.tokenId);
                 delete pfpOwners[_pfpKey(pfp.contract_, pfp.tokenId)];
             }
-            primaryPFPs[msg.sender] = PFP(contract_, tokenId);
+            primaryPFPs[msg.sender] = PFP(contract_, tokenId, false);
             if (lastOwner == address(0)) {
                 return;
             }
@@ -142,67 +239,5 @@ contract PrimaryPFP is IPrimaryPFP, ERC165, Initializable {
         }
         emit CollectionPrimaryRemoved(lastOwner, contract_, tokenId);
         delete collectionPrimaryPFPs[lastOwner][contract_];
-    }
-
-    function removePrimary(address contract_, uint256 tokenId) external override {
-        address owner = IERC721(contract_).ownerOf(tokenId);
-        require(owner == msg.sender, "msg.sender is not the owner");
-        bytes32 pfpHash = _pfpKey(contract_, tokenId);
-        address boundAddress = pfpOwners[pfpHash];
-        require(boundAddress != address(0), "primary PFP not set");
-
-        emit PrimaryRemoved(boundAddress, contract_, tokenId);
-        delete pfpOwners[pfpHash];
-        delete primaryPFPs[boundAddress];
-    }
-
-    function removeCollectionPrimary(address contract_, uint256 tokenId) external override {
-        address owner = IERC721(contract_).ownerOf(tokenId);
-        require(owner == msg.sender, "msg.sender is not the owner");
-        bytes32 pfpHash = _pfpKey(contract_, tokenId);
-        address boundAddress = collectionPFPOwners[pfpHash];
-        require(boundAddress != address(0), "collection primary PFP not set");
-        emit CollectionPrimaryRemoved(boundAddress, contract_, tokenId);
-        delete collectionPFPOwners[pfpHash];
-        delete collectionPrimaryPFPs[boundAddress][contract_];
-    }
-
-    function getPrimary(address addr) external view override returns (address, uint256) {
-        PFP memory pfp = primaryPFPs[addr];
-        return (pfp.contract_, pfp.tokenId);
-    }
-
-    function hasCollectionPrimary(address addr, address contract_) external view override returns (bool) {
-        return
-            collectionPrimaryPFPs[addr][contract_] != 0 ||
-            collectionPrimaryPFPIdZero[_collectionPFPKey(addr, contract_)];
-    }
-
-    function getCollectionPrimary(address addr, address contact_) external view override returns (uint256) {
-        return collectionPrimaryPFPs[addr][contact_];
-    }
-
-    function getPrimaries(address[] calldata addrs) external view returns (PFP[] memory) {
-        uint256 length = addrs.length;
-        PFP[] memory result = new PFP[](length);
-        for (uint256 i; i < length; ) {
-            result[i] = primaryPFPs[addrs[i]];
-            unchecked {
-                ++i;
-            }
-        }
-        return result;
-    }
-
-    function getPrimaryAddress(address contract_, uint256 tokenId) external view override returns (address) {
-        return pfpOwners[_pfpKey(contract_, tokenId)];
-    }
-
-    function _pfpKey(address collection, uint256 tokenId) internal pure virtual returns (bytes32) {
-        return keccak256(abi.encodePacked(collection, tokenId));
-    }
-
-    function _collectionPFPKey(address owner, address collection) internal pure virtual returns (bytes32) {
-        return keccak256(abi.encodePacked(owner, collection));
     }
 }
