@@ -55,7 +55,7 @@ contract PrimaryCollectionPFPTest is Test {
 
     function testCollectionDuplicatedSet() public {
         _setCollectionPrimaryPFP(0);
-        vm.expectRevert("duplicated set");
+        vm.expectRevert("collection duplicated set");
         _setCollectionPrimaryPFP(0);
     }
 
