@@ -16,7 +16,14 @@ forge test
 forge test --gas-report
 ```
 
-- get salt by [create2crunch](https://github.com/0age/create2crunch) and change it in [deploy script](https://github.com/ForeverPFP/primary-pfp-contract/blob/main/script/deploy.s.sol#L23)
+- format code
+install [prettier-solidity](https://github.com/prettier-solidity/prettier-plugin-solidity)
+
+```
+npx prettier --write --plugin=prettier-plugin-solidity 'contracts/**/*.sol'
+```
+
+- get salt by [create2crunch](https://github.com/0age/create2crunch) and change it in [deploy script](https://github.com/BittyIO/Primary-PFP/blob/main/script/deploy.s.sol#L23)
 
 
 - deploy and verify in etherscan
@@ -27,9 +34,10 @@ forge script --broadcast -vvvv --rpc-url {rpc_url} \
     --verify \
     script/deploy.s.sol:Deploy
 ```
+
 - initialize with delegate cash address
 ```
-0x00000000000076A84feF008CDAbe6409d2FE638B
+0x00000000000000447e69651d841bd8d104bed493
 ```
 
 
@@ -37,10 +45,10 @@ forge script --broadcast -vvvv --rpc-url {rpc_url} \
 
 |Mainnet Chain|Address|
 |---|---|
-|Ethereum|[0x000000000374800E799771196BF826cb7e7511a2](https://etherscan.io/address/0x000000000374800E799771196BF826cb7e7511a2)|
+|Ethereum|[]()|
 
 |Testnet Chain|Address|
 |---|---|
-|Ethereum (Goerli)|[0x000000000374800E799771196BF826cb7e7511a2](https://goerli.etherscan.io/address/0x000000000374800E799771196BF826cb7e7511a2)|
+|Ethereum Sepolia|[]()|
 
 If you'd like to get the Primary on another EVM chain, anyone in the community can deploy to the same address and make a PR to add link here.

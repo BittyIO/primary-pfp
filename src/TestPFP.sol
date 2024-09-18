@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: CC0-1.0
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.21;
 
 import {ERC721} from "../lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
 import {ERC721Enumerable} from "../lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
@@ -14,10 +14,7 @@ contract TestPFP is Ownable, ERC721Enumerable {
     uint256 public collectionLimit;
     mapping(address => uint256) public mintCounts;
 
-    constructor(
-        string memory name,
-        string memory symbol
-    ) Ownable() ERC721(name, symbol) {
+    constructor(string memory name, string memory symbol) Ownable() ERC721(name, symbol) {
         baseURI = "https://MintableERC721/";
         collectionLimit = 10000;
     }
