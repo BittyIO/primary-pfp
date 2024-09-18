@@ -20,7 +20,7 @@ forge test --gas-report
 install [prettier-solidity](https://github.com/prettier-solidity/prettier-plugin-solidity)
 
 ```
-npx prettier --write --plugin=prettier-plugin-solidity 'contracts/**/*.sol'
+npx prettier --write --plugin=prettier-plugin-solidity 'src/**/*.sol' 'test/**/*.sol'
 ```
 
 - get salt by [create2crunch](https://github.com/0age/create2crunch) and change it in [deploy script](https://github.com/BittyIO/Primary-PFP/blob/main/script/deploy.s.sol#L23)
