@@ -1,54 +1,57 @@
-# How to run the project
-Install [foundry](https://book.getfoundry.sh/)
+# Why Primary PFP?
 
-- build
-```
-forge build
-```
+Primary PFP is for setting primary PFP for an Ethereum/Bitcoin address, inspired by [Primary ENS](https://support.ens.domains/en/articles/7890756-the-primary-name).
 
-- test
-```
-forge test 
-```
 
-- gas-report
-```
-forge test --gas-report
-```
-
-- format code
-install [prettier-solidity](https://github.com/prettier-solidity/prettier-plugin-solidity)
+Image the world with decentralized identity data providing function:
 
 ```
-npx prettier --write --plugin=prettier-plugin-solidity 'src/**/*.sol' 'test/**/*.sol'
+// alice.eth, (0x1234, 123, isVerified) = bitty.getIdentiy(0xaliceEthreumAddress, "Ethereum")
+// alice.btc, (inscription_id) = bitty.getIdentiy(bc1pxxxxAliceBitcoinAddress, "Bitcoin")
+
+func (name, PFP) = bitty.getIdentity(address, chainName);
 ```
 
-- get salt by [create2crunch](https://github.com/0age/create2crunch) and change it in [deploy script](https://github.com/BittyIO/Primary-PFP/blob/main/script/deploy.s.sol#L23)
+For each of on-chain ID on Ethereum or Bitcoin, people need name and avatar binding to their
+address, that makes the web3 login by address siged possible, and that make your id data on-chain instead of controlled by centralized web2 database.
+
+While we have Primary ENS, we don't have Primary PFP yet for Ethereum, and none of primary [BTCName](https://github.com/BtcName) and
+primary PFP for [Bitcoin Ordinals](https://github.com/ordinals/ord) is made yet.
+
+This project try to finish the Primary PFP for both Etherum and Bitcoin, Etherum for solidity code and Bitcoin for ordinals transaction specification for indexers.
+
+# Primary PFP for Ethereum
+
+- Public primary PFP
 
 
-- deploy and verify in etherscan
-```
-forge script --broadcast -vvvv --rpc-url {rpc_url} \
-    --private-key {private_key} \
-    --etherscan-api-key {ethercan_api_key} \
-    --verify \
-    script/deploy.s.sol:Deploy
-```
+ - [setPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L31)
 
-- initialize with delegate cash address
-```
-0x00000000000000447e69651d841bd8d104bed493
-```
+ - [setPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L40)
+
+ - [removePrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L49)
+
+ - [getPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L57)
+
+ - [getPrimaries](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L65)
+
+ - [getPrimaryAddress](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L74)
+ 
+
+- Collection primary PFP for communities
 
 
-## Finalized Deployment
+ - [setCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L25)
+ 
+ - [setCollectionPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L34)
 
-|Mainnet Chain|Address|
-|---|---|
-|Ethereum|[]()|
+ - [removeCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L43)
 
-|Testnet Chain|Address|
-|---|---|
-|Ethereum Sepolia|[]()|
+ - [hasCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L52)
 
-If you'd like to get the Primary on another EVM chain, anyone in the community can deploy to the same address and make a PR to add link here.
+ - [getCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L61)
+
+# Primary PFP for Bitcoin Ordinals
+// TBD
+
+If you want to contribute the project, read dev doc [here](https://github.com/BittyIO/Primary-PFP/blob/main/dev.md)
