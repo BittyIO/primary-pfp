@@ -6,10 +6,10 @@ Primary PFP is for setting primary PFP for an Ethereum/Bitcoin address, inspired
 Image the world with decentralized identity data providing function:
 
 ```
-// alice.eth, (0x1234, 123, isVerified) = bitty.getIdentiy(0xaliceEthreumAddress, "Ethereum")
-// alice.btc, (inscription_id) = bitty.getIdentiy(bc1pxxxxAliceBitcoinAddress, "Bitcoin")
+// alice.eth, avatar_image_url, avatar_is_collection_verified = bitty.getIdentiy(0xaliceEthreumAddress, "Ethereum")
+// alice.btc, avatar_image_url, avatar_is_collection_verified = bitty.getIdentiy(bc1pxxxxAliceBitcoinAddress, "Bitcoin")
 
-func (name, PFP) = bitty.getIdentity(address, chainName);
+func (name, avatar_image_url, is_avatar_collection_verified) = bitty.getIdentity(address, chainName);
 ```
 
 For each of on-chain ID on Ethereum or Bitcoin, people need name and avatar binding to their
