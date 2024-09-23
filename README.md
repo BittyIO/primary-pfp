@@ -20,33 +20,31 @@ This project try to finish the Primary PFP for both Etherum and Bitcoin, Etherum
 # Primary PFP for Ethereum
 
 - Public primary PFP
+  
+  - [setPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L31)
 
+  - [setPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L40)
 
- - [setPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L31)
+  - [removePrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L49)
 
- - [setPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L40)
+  - [getPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L57)
 
- - [removePrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L49)
+  - [getPrimaries](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L65)
 
- - [getPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L57)
-
- - [getPrimaries](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L65)
-
- - [getPrimaryAddress](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L74)
+  - [getPrimaryAddress](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L74)
  
 
 - Collection primary PFP for communities
-
-
- - [setCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L25)
+  
+  - [setCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L25)
  
- - [setCollectionPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L34)
+  - [setCollectionPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L34)
 
- - [removeCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L43)
+  - [removeCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L43)
 
- - [hasCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L52)
+  - [hasCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L52)
 
- - [getCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L61)
+  - [getCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L61)
 
 # Primary PFP for Bitcoin Ordinals
 // TBD
