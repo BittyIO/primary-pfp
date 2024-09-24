@@ -12,8 +12,7 @@ Image the world with decentralized identity data providing function that you can
 func (name, avatar_image_url, is_avatar_collection_verified) = bitty.getIdentity(address, chainName);
 ```
 
-While we have Primary ENS, we don't have Primary PFP yet for Ethereum, and none of primary [BTCName](https://github.com/BtcName) and
-primary PFP for [Bitcoin Ordinals](https://github.com/ordinals/ord) is made yet.
+While we have Primary ENS, we don't have Primary PFP for Ethereum/[Bitcoin Ordinals](https://github.com/ordinals/ord) yet. And the avatar data of ENS doesn't verify the ownership of the PFP asset.
 
 This project try to finish the Primary PFP for both Etherum and Bitcoin, Etherum for solidity code and Bitcoin for ordinals transaction specification for indexers.
 
