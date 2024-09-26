@@ -1,51 +1,77 @@
-# Why Primary PFP?
+# Primary PFP for Ethereum and Bitcoin
 
-Primary PFP is for setting primary PFP for an Ethereum/Bitcoin address, inspired by [Primary ENS](https://support.ens.domains/en/articles/7890756-the-primary-name).
+## Introduction
 
+Primary PFP is a system for setting a primary profile picture (PFP) for Ethereum and Bitcoin addresses, inspired by [Primary ENS](https://support.ens.domains/en/articles/7890756-the-primary-name). This project aims to create a decentralized identity system with PFP ownership verified where users can sign in with their wallet addresses across various platforms.
 
-Image the world with decentralized identity data providing function that you can sign in with your wallet address anywhere:
+Imagine a world with decentralized identity data, where you can sign in with your wallet address anywhere:
 
+```python
+# Example usage:
+# name, avatar_url, is_avatar_collection_verified = get_identity(ethereum_address, "Ethereum")
+# name, avatar_url, is_avatar_collection_verified = get_identity(bitcoin_address, "Bitcoin")
+
+def get_public_identity(address: str, chain_name: str) -> Tuple[str, str, bool]:
+    # Returns: (name, avatar_image_url, is_avatar_collection_verified)
+    pass
 ```
-// alice.eth, "https://images.wrappedpunks.com/images/punks/6125.png", true = bitty.getIdentiy(0xaliceEthreumAddress, "Ethereum")
-// alice.btc, "https://ordiscan.com/content/4cf11ab95d73b22a73ac1e74861a71ffd376739b4246c9b14bf0bc01e734f1a7i0", true = bitty.getIdentiy(bc1pxxxxAliceBitcoinAddress, "Bitcoin")
 
-func (name, avatar_image_url, is_avatar_collection_verified) = bitty.getIdentity(address, chainName);
+And people can use different PFP in different community just like setting different profile picture in different discord channel:
+
+```python
+# Example usage:
+# avatar_url = get_collection_avatar_url(ethereum_address, "Ethereum", collection_contract_address)
+# avatar_url = get_collection_avatar_url(bitcoin_address, "Bitcoin", verified_collection_id)
+
+def get_collection_avatar_url(address: str, chain_name: str, collection_id: str) -> str:
+    # Returns: avatar_image_url
+    pass
 ```
 
-While we have Primary ENS, we don't have Primary PFP for Ethereum/[Bitcoin Ordinals](https://github.com/ordinals/ord) yet. And the avatar data of ENS doesn't verify the ownership of the PFP asset.
+## Primary PFP for Ethereum
 
-This project try to finish the Primary PFP for both Etherum and Bitcoin, Etherum for solidity code and Bitcoin for ordinals transaction specification for indexers.
+### Public Primary PFP
 
-# Primary PFP for Ethereum
+- [setPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L31)
+- [setPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L40)
+- [removePrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L49)
+- [getPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L57)
+- [getPrimaries](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L65)
+- [getPrimaryAddress](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L74)
 
-- Public primary PFP
-  
-  - [setPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L31)
+### Collection Primary PFP
 
-  - [setPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L40)
+- [setCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L25)
+- [setCollectionPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L34)
+- [removeCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L43)
+- [hasCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L52)
+- [getCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L61)
 
-  - [removePrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L49)
+For contributing to Primary PFP for Ethereum, please refer to the [developer documentation](https://github.com/BittyIO/Primary-PFP/blob/main/dev.md).
 
-  - [getPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L57)
+## Primary PFP for Bitcoin Ordinals
 
-  - [getPrimaries](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L65)
+### Primary PFP Definition
 
-  - [getPrimaryAddress](https://github.com/BittyIO/Primary-PFP/blob/main/src/IPrimaryPFP.sol#L74)
- 
+#### For [Verified](https://github.com/BittyIO/Primary-PFP/blob/main/verified_ordinals.md) Ordinals Collections:
 
-- Collection primary PFP for communities
-  
-  - [setCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L25)
- 
-  - [setCollectionPrimaryByDelegateCash](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L34)
+1. Setting Primary PFP:
+   - If a transfer event has the same `from` and `to` addresses with an empty `op_return`, that ordinals PFP becomes primary.
+   - If `op_return` contains `delegate:{bitcoinAddress}`, the PFP is set as primary and delegated to the specified Bitcoin address.
+2. Validity: The primary ordinals PFP data is valid only while the ordinals remain in the wallet.
+3. Override: The move out event or most recent primary ordinals data overrides previous data. Overridden data is removed.
 
-  - [removeCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L43)
+#### For Non-Verified Ordinals Collections:
 
-  - [hasCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L52)
+1. Validity: Ordinals must have a valid image content type.
+2. Setting Primary PFP: A transfer event with the same `from` and `to` addresses and `op_return` text "set_primary" sets the ordinals PFP as primary.
+3. No delegation function available.
+4. Validity and override rules are the same as for verified collections.
 
-  - [getCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L61)
+### Collection Primary PFP Definition (Verified Ordinals Only)
 
-# Primary PFP for Bitcoin Ordinals
-// TBD
-
-If you want to contribute the project, read dev doc [here](https://github.com/BittyIO/Primary-PFP/blob/main/dev.md)
+1. Setting Collection Primary PFP:
+   - Transfer event with same `from` and `to` addresses and `op_return` text "set_collection_primary" sets the ordinals PFP as collection primary.
+   - For delegation, use `op_return` text "set_collection_primary_delegate:{bitcoinAddress}".
+2. Validity: Same as individual Primary PFP.
+3. Override: The move out event or most recent collection primary ordinals data overrides previous data. Overridden data is removed.
