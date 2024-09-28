@@ -56,22 +56,22 @@ For contributing to Primary PFP for Ethereum, please refer to the [developer doc
 #### For [Verified](https://github.com/BittyIO/Primary-PFP/blob/main/verified_ordinals.md) Ordinals Collections:
 
 1. Setting Primary PFP:
-   - If a transfer event has the same `from` and `to` addresses with an empty `op_return`, that ordinals PFP becomes primary.
-   - If `op_return` contains `delegate:{bitcoinAddress}`, the PFP is set as primary and delegated to the specified Bitcoin address.
+   - If a transfer event has the same `from` and `to` address with an empty `op_return`, that ordinals PFP becomes primary.
+   - If `op_return` is `delegate:{bitcoinAddress}`, the PFP is set as primary and delegated to the specified Bitcoin address.
 2. Validity: The primary ordinals PFP data is valid only while the ordinals remain in the wallet.
 3. Override: The move out event or most recent primary ordinals data overrides previous data. Overridden data is removed.
 
 #### For Non-Verified Ordinals Collections:
 
 1. Validity: Ordinals must have a valid image content type.
-2. Setting Primary PFP: A transfer event with the same `from` and `to` addresses and `op_return` text "set_primary" sets the ordinals PFP as primary.
+2. Setting Primary PFP: A transfer event with the same `from` and `to` address and `op_return` is `set_primary` sets the ordinals PFP as primary.
 3. No delegation function available.
 4. Validity and override rules are the same as for verified collections.
 
 ### Collection Primary PFP Definition (Verified Ordinals Only)
 
 1. Setting Collection Primary PFP:
-   - Transfer event with same `from` and `to` addresses and `op_return` text "set_collection_primary" sets the ordinals PFP as collection primary.
-   - For delegation, use `op_return` text "set_collection_primary_delegate:{bitcoinAddress}".
+   - Transfer event with same `from` and `to` address and `op_return` text "set_collection_primary" sets the ordinals PFP as collection primary.
+   - For delegation, use `op_return` is `set_collection_primary_delegate:{bitcoinAddress}`.
 2. Validity: Same as individual Primary PFP.
 3. Override: The move out event or most recent collection primary ordinals data overrides previous data. Overridden data is removed.
