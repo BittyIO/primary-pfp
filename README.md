@@ -71,7 +71,7 @@ Verified collections [here](https://github.com/BittyIO/Primary-PFP/blob/main/ver
 ### Collection Primary PFP Definition (Verified Ordinals Only)
 
 1. Setting Collection Primary PFP:
-   - Transfer event with same `from` and `to` address and `op_return` text "set_collection_primary" sets the ordinals PFP as collection primary.
+   - Transfer event with same `from` and `to` address and `op_return` text `set_collection_primary` sets the ordinals PFP as collection primary.
    - For delegation, use `op_return` is `set_collection_primary_delegate:{bitcoinAddress}`.
 2. Validity: Same as individual Primary PFP.
 3. Override: The move out event or most recent collection primary ordinals data overrides previous data. Overridden data is removed.
