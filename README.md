@@ -47,13 +47,13 @@ def get_collection_avatar_url(address: str, chain_name: str, collection_id: str)
 - [hasCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L52)
 - [getCollectionPrimary](https://github.com/BittyIO/Primary-PFP/blob/main/src/ICollectionPrimaryPFP.sol#L61)
 
-For contributing to Primary PFP for Ethereum, please refer to the [developer documentation](https://github.com/BittyIO/Primary-PFP/blob/main/dev.md).
+Verified collections [here](https://github.com/BittyIO/Primary-PFP/blob/main/verified_collections.md##verified-pfp-collections-for-ethereum), if you want to contribute, please refer to the [developer documentation](https://github.com/BittyIO/Primary-PFP/blob/main/dev.md).
 
 ## Primary PFP for Bitcoin Ordinals
 
 ### Primary PFP Definition
 
-#### For [Verified](https://github.com/BittyIO/Primary-PFP/blob/main/verified_ordinals.md) Ordinals Collections:
+#### For [Verified Ordinals Collections](https://github.com/BittyIO/Primary-PFP/blob/main/verified_collections.md##verified-pfp-collections-ids-for-ordinals):
 
 1. Setting Primary PFP:
    - If a transfer event has the same `from` and `to` address with an empty `op_return`, that ordinals PFP becomes primary.
