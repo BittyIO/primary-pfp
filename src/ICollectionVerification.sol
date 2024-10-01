@@ -4,7 +4,6 @@ pragma solidity ^0.8.27;
 /**
  * @title Same image url will confuse people, so verify a collection list of unique PFPs is important for public social networking.
  *
- * @dev this verfication can be maintained by the community by voting on snapshot with future developed tokens.
  */
 interface ICollectionVerification {
     // @notice Emitted when a PFP collection is verified.
@@ -14,14 +13,14 @@ interface ICollectionVerification {
     event CollectionVerificationRemoved(address indexed contract_);
 
     /**
-     * @notice Owner only, multi-sig by community voted.
+     * @notice Owner only
      *
      * @param contracts The collection addresses of the PFPs
      */
     function addVerification(address[] calldata contracts) external;
 
     /**
-     * @notice Owner only, multi-sig by community voted.
+     * @notice Owner only
      *
      * @param contracts The collection addresses of the PFPs
      */
