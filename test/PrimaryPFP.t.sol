@@ -49,13 +49,13 @@ contract PrimaryPFPTest is Test {
     }
 
     function testSetNotFromSender() public {
-        vm.expectRevert("msg.sender is not the owner");
+        vm.expectRevert(PrimaryPFP.MsgSenderNotOwner.selector);
         ppfp.setPrimary(testPFPAddress, 0);
     }
 
     function testDuplicatedSet() public {
         _setPrimaryPFP(0);
-        vm.expectRevert("duplicated set");
+        vm.expectRevert(PrimaryPFP.PrimaryDuplicateSet.selector);
         _setPrimaryPFP(0);
     }
 
@@ -134,7 +134,7 @@ contract PrimaryPFPTest is Test {
     }
 
     function testSetPrimaryPFPByDelegateCashNotDelegated() public {
-        vm.expectRevert("msg.sender is not delegated");
+        vm.expectRevert(PrimaryPFP.MsgSenderNotDelegated.selector);
         ppfp.setPrimaryByDelegateCash(testPFPAddress, 0);
     }
 
@@ -325,13 +325,13 @@ contract PrimaryPFPTest is Test {
     }
 
     function testRemoveFromWrongSender() public {
-        vm.expectRevert("msg.sender is not the owner");
+        vm.expectRevert(PrimaryPFP.MsgSenderNotOwner.selector);
         vm.prank(delegate);
         ppfp.removePrimary(testPFPAddress, 0);
     }
 
     function testRemoveFromAddressNotSet() public {
-        vm.expectRevert("primary PFP not set");
+        vm.expectRevert(PrimaryPFP.PrimaryNotSet.selector);
         vm.prank(msg.sender);
         ppfp.removePrimary(testPFPAddress, 0);
     }
