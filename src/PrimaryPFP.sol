@@ -34,6 +34,13 @@ interface DelegateCashInterface {
 }
 
 contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerification, Ownable, ERC165, Initializable {
+    error MsgSenderNotOwner();
+    error MsgSenderNotDelegated();
+    error PrimaryNotSet();
+    error PrimaryCollectionNotSet();
+    error PrimaryDuplicateSet();
+    error PrimaryCollectionDuplicateSet();
+
     // keccak256(abi.encode(collection, tokenId)) => ownerAddress
     mapping(bytes32 => address) private pfpOwners;
     // ownerAddress => PFPStruct
@@ -68,7 +75,9 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
     // Primary PFP functions
     function setPrimary(address contract_, uint256 tokenId) external override {
         address tokenOwner = IERC721(contract_).ownerOf(tokenId);
-        require(tokenOwner == msg.sender, "msg.sender is not the owner");
+        if (tokenOwner != msg.sender) {
+            revert MsgSenderNotOwner();
+        }
         _set(contract_, tokenId, false);
         emit PrimarySet(msg.sender, contract_, tokenId);
     }
@@ -79,11 +88,14 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
 
     function removePrimary(address contract_, uint256 tokenId) external override {
         address owner = IERC721(contract_).ownerOf(tokenId);
-        require(owner == msg.sender, "msg.sender is not the owner");
+        if (owner != msg.sender) {
+            revert MsgSenderNotOwner();
+        }
         bytes32 pfpHash = _pfpKey(contract_, tokenId);
         address boundAddress = pfpOwners[pfpHash];
-        require(boundAddress != address(0), "primary PFP not set");
-
+        if (boundAddress == address(0)) {
+            revert PrimaryNotSet();
+        }
         emit PrimaryRemoved(boundAddress, contract_, tokenId);
         delete pfpOwners[pfpHash];
         delete primaryPFPs[boundAddress];
@@ -121,17 +133,23 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
 
     function setCollectionPrimary(address contract_, uint256 tokenId) external override {
         address tokenOwner = IERC721(contract_).ownerOf(tokenId);
-        require(tokenOwner == msg.sender, "msg.sender is not the owner");
+        if (tokenOwner != msg.sender) {
+            revert MsgSenderNotOwner();
+        }
         _set(contract_, tokenId, true);
         emit CollectionPrimarySet(msg.sender, contract_, tokenId);
     }
 
     function removeCollectionPrimary(address contract_, uint256 tokenId) external override {
         address owner = IERC721(contract_).ownerOf(tokenId);
-        require(owner == msg.sender, "msg.sender is not the owner");
+        if (owner != msg.sender) {
+            revert MsgSenderNotOwner();
+        }
         bytes32 pfpHash = _pfpKey(contract_, tokenId);
         address boundAddress = collectionPFPOwners[pfpHash];
-        require(boundAddress != address(0), "collection primary PFP not set");
+        if (boundAddress == address(0)) {
+            revert PrimaryCollectionNotSet();
+        }
         emit CollectionPrimaryRemoved(boundAddress, contract_, tokenId);
         delete collectionPFPOwners[pfpHash];
         delete collectionPrimaryPFPs[boundAddress][contract_];
@@ -181,12 +199,13 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
 
     function _setPrimaryByDelegateCash(address contract_, uint256 tokenId, bool isCollection) internal {
         address tokenOwner = IERC721(contract_).ownerOf(tokenId);
-        require(
-            dc.checkDelegateForERC721(msg.sender, tokenOwner, contract_, tokenId, bytes32(0)) ||
+        if (
+            !(dc.checkDelegateForERC721(msg.sender, tokenOwner, contract_, tokenId, bytes32(0)) ||
                 dc.checkDelegateForContract(msg.sender, tokenOwner, contract_, bytes32(0)) ||
-                dc.checkDelegateForAll(msg.sender, tokenOwner, bytes32(0)),
-            "msg.sender is not delegated"
-        );
+                dc.checkDelegateForAll(msg.sender, tokenOwner, bytes32(0)))
+        ) {
+            revert MsgSenderNotDelegated();
+        }
         _set(contract_, tokenId, isCollection);
         if (!isCollection) {
             emit PrimarySetByDelegateCash(msg.sender, contract_, tokenId);
@@ -200,7 +219,9 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
         address lastOwner;
         if (!isCollection) {
             lastOwner = pfpOwners[pfpHash];
-            require(lastOwner != msg.sender, "duplicated set");
+            if (lastOwner == msg.sender) {
+                revert PrimaryDuplicateSet();
+            }
             pfpOwners[pfpHash] = msg.sender;
             PFP memory pfp = primaryPFPs[msg.sender];
             if (pfp.contract_ != address(0)) {
@@ -217,7 +238,9 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
         }
 
         lastOwner = (tokenId != 0) ? collectionPFPOwners[pfpHash] : collectionPrimaryPFPZeroOwners[contract_];
-        require(lastOwner != msg.sender, "collection duplicated set");
+        if (lastOwner == msg.sender) {
+            revert PrimaryCollectionDuplicateSet();
+        }
         collectionPFPOwners[pfpHash] = msg.sender;
         uint256 collectionTokenId = collectionPrimaryPFPs[msg.sender][contract_];
         if (collectionTokenId != 0 || collectionPrimaryPFPZeroOwners[contract_] == msg.sender) {

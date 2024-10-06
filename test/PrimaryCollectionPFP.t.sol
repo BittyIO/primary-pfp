@@ -23,7 +23,6 @@ contract PrimaryCollectionPFPTest is Test {
     TestPFP public testPFP;
     TestPFP public testPFP1;
     address public testPFPAddress;
-    address public testPFPAddress1;
     address public delegate;
     address contract_;
     uint256 tokenId;
@@ -36,7 +35,6 @@ contract PrimaryCollectionPFPTest is Test {
         testPFP = new TestPFP("Test PFP", "TPFP");
         testPFP1 = new TestPFP("Test PFP1", "TPFP1");
         testPFPAddress = address(testPFP);
-        testPFPAddress1 = address(testPFP1);
         delegate = makeAddr("delegate");
         vm.prank(msg.sender);
         testPFP.mint(0);
@@ -49,13 +47,13 @@ contract PrimaryCollectionPFPTest is Test {
     }
 
     function testSetNotFromSender() public {
-        vm.expectRevert("msg.sender is not the owner");
+        vm.expectRevert(PrimaryPFP.MsgSenderNotOwner.selector);
         ppfp.setCollectionPrimary(testPFPAddress, 0);
     }
 
     function testCollectionDuplicatedSet() public {
         _setCollectionPrimaryPFP(0);
-        vm.expectRevert("collection duplicated set");
+        vm.expectRevert(PrimaryPFP.PrimaryCollectionDuplicateSet.selector);
         _setCollectionPrimaryPFP(0);
     }
 
@@ -80,7 +78,7 @@ contract PrimaryCollectionPFPTest is Test {
     }
 
     function testSetPrimaryCollectionPFPByDelegateCashNotDelegated() public {
-        vm.expectRevert("msg.sender is not delegated");
+        vm.expectRevert(PrimaryPFP.MsgSenderNotDelegated.selector);
         ppfp.setCollectionPrimaryByDelegateCash(testPFPAddress, 0);
     }
 
@@ -237,13 +235,13 @@ contract PrimaryCollectionPFPTest is Test {
     }
 
     function testRemoveFromWrongSender() public {
-        vm.expectRevert("msg.sender is not the owner");
+        vm.expectRevert(PrimaryPFP.MsgSenderNotOwner.selector);
         vm.prank(delegate);
         ppfp.removeCollectionPrimary(testPFPAddress, 0);
     }
 
     function testRemoveFromAddressNotSet() public {
-        vm.expectRevert("collection primary PFP not set");
+        vm.expectRevert(PrimaryPFP.PrimaryCollectionNotSet.selector);
         vm.prank(msg.sender);
         ppfp.removeCollectionPrimary(testPFPAddress, 0);
     }
