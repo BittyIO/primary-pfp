@@ -31,8 +31,12 @@ npx prettier --write --plugin=prettier-plugin-solidity 'src/**/*.sol' 'test/**/*
 forge script --broadcast -vvvv --rpc-url {rpc_url} \
     --private-key {private_key} \
     --etherscan-api-key {ethercan_api_key} \
-    --verify \
     script/deploy.s.sol:Deploy
+```
+```
+forge verify-check {id} \
+    --etherscan-api-key {ethercan_api_key} \
+    --chain-id {chain_id}
 ```
 
 - initialize with delegate cash address
@@ -49,6 +53,6 @@ forge script --broadcast -vvvv --rpc-url {rpc_url} \
 
 |Testnet Chain|Address|
 |---|---|
-|Ethereum Sepolia|[]()|
+|Ethereum Sepolia|[0x000000074F2C716416DB00337367bac9d28Db3e0](https://sepolia.etherscan.io/address/0x000000074F2C716416DB00337367bac9d28Db3e0)|
 
 If you'd like to get the Primary on another EVM chain, anyone in the community can deploy to the same address and make a PR to add link here.
