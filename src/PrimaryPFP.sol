@@ -68,6 +68,10 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
         return interfaceId == type(IPrimaryPFP).interfaceId || super.supportsInterface(interfaceId);
     }
 
+    constructor() {
+        transferOwnership(tx.origin);
+    }
+
     function initialize(address dcAddress) public initializer {
         dc = DelegateCashInterface(dcAddress);
     }

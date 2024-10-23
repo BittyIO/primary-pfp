@@ -33,6 +33,15 @@ forge script --broadcast -vvvv --rpc-url {rpc_url} \
     --etherscan-api-key {ethercan_api_key} \
     script/deploy.s.sol:Deploy
 ```
+
+```
+forge verify-contract \
+    --chain-id {chain_id} \
+    {contract_address} \
+    --etherscan-api-key {ethercan_api_key} \
+    src/PrimaryPFP.sol:PrimaryPFP
+```
+
 ```
 forge verify-check {id} \
     --etherscan-api-key {ethercan_api_key} \
@@ -53,6 +62,6 @@ forge verify-check {id} \
 
 |Testnet Chain|Address|
 |---|---|
-|Ethereum Sepolia|[0x000000074F2C716416DB00337367bac9d28Db3e0](https://sepolia.etherscan.io/address/0x000000074F2C716416DB00337367bac9d28Db3e0)|
+|Ethereum Sepolia|[0x0000000000749f588c82E9cd5A67C91314e56458](https://sepolia.etherscan.io/address/0x0000000000749f588c82E9cd5A67C91314e56458)|
 
-If you'd like to get the Primary on another EVM chain, anyone in the community can deploy to the same address and make a PR to add link here.
+If you'd like to get the Primary on another EVM chain, feel free to submit an issue here.
