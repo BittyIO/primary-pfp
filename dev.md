@@ -58,10 +58,10 @@ forge verify-check {id} \
 
 |Mainnet Chain|Address|
 |---|---|
-|Ethereum|[]()|
+|Ethereum Mainnet|[0x0000000000749f588c82E9cd5A67C91314e56458](https://etherscan.io/address/0x0000000000749f588c82E9cd5A67C91314e56458)|
 
 |Testnet Chain|Address|
 |---|---|
 |Ethereum Sepolia|[0x0000000000749f588c82E9cd5A67C91314e56458](https://sepolia.etherscan.io/address/0x0000000000749f588c82E9cd5A67C91314e56458)|
 
-If you'd like to get the Primary on another EVM chain, feel free to submit an issue here.
+If you'd like to get the Primary PFP on another EVM chain, feel free to submit an issue here.
