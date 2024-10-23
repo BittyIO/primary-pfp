@@ -27,16 +27,21 @@ contract CollectionVerificationTest is Test {
         vm.expectEmit(true, false, false, true);
 
         emit CollectionVerified(testPFPAddress);
+
+        vm.prank(tx.origin);
         ppfp.addVerification(pfpAddresses);
         assertTrue(ppfp.isCollectionVerified(testPFPAddress));
     }
 
     function testRemoveVerification() public {
+        vm.prank(tx.origin);
         ppfp.addVerification(pfpAddresses);
 
         vm.expectEmit(true, false, false, true);
 
         emit CollectionVerificationRemoved(testPFPAddress);
+
+        vm.prank(tx.origin);
         ppfp.removeVerification(pfpAddresses);
         assertFalse(ppfp.isCollectionVerified(testPFPAddress));
     }

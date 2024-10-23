@@ -75,7 +75,7 @@ contract PrimaryPFPTest is Test {
 
     function testGetVerifiedPrimary() public {
         _setPrimaryPFP(0);
-
+        vm.prank(tx.origin);
         ppfp.addVerification(pfpAddresses);
         IPrimaryPFP.PFP memory pfp = ppfp.getPrimary(msg.sender);
         assertEq(pfp.contract_, testPFPAddress);
