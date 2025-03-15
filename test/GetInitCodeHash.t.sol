@@ -15,6 +15,6 @@ contract GetInitCodeHashTest is Test {
 
     function testGetInitCodeHash() public view {
         bytes memory bytecode = type(PrimaryPFP).creationCode;
-        console.logBytes32(keccak256(abi.encodePacked(bytecode)));
+        console.logBytes32(keccak256(bytecode));
     }
 }

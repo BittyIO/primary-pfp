@@ -24,7 +24,7 @@ contract TestPFP is Ownable, ERC721Enumerable {
      * @dev Function to mint the next available token ID.
      * @return A boolean that indicates if the operation was successful.
      */
-    function mint() external returns (bool) {
+    function mintNext() external returns (bool) {
         require(_currentTokenId < collectionLimit, "exceed collection limit");
 
         mintCounts[_msgSender()] += 1;
@@ -35,15 +35,26 @@ contract TestPFP is Ownable, ERC721Enumerable {
         return true;
     }
 
-    function setBaseURI(string memory baseURI_) external onlyOwner {
-        baseURI = baseURI_;
+    /**
+     * @dev Function to mint the next available token ID.
+     * @return A boolean that indicates if the operation was successful.
+     */
+    function mint(uint256 tokenId) external returns (bool) {
+        require(_currentTokenId < collectionLimit, "exceed collection limit");
+
+        mintCounts[_msgSender()] += 1;
+        require(mintCounts[_msgSender()] <= 10, "exceed mint limit");
+
+        _currentTokenId += 1;
+        _mint(_msgSender(), tokenId);
+        return true;
     }
 
     function setCollectionLimit(uint256 collectionLimit_) external onlyOwner {
         collectionLimit = collectionLimit_;
     }
 
-    function _baseURI() internal view virtual override returns (string memory) {
+    function getBaseURI() external view returns (string memory) {
         return baseURI;
     }
 }
