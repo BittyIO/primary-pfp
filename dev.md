@@ -56,12 +56,16 @@ forge verify-check {id} \
 
 ## Finalized Deployment
 
-|Mainnet Chain|Address|
-|---|---|
-|Ethereum Mainnet|[0x0000000000749f588c82E9cd5A67C91314e56458](https://etherscan.io/address/0x0000000000749f588c82E9cd5A67C91314e56458)|
-
 |Testnet Chain|Address|
 |---|---|
 |Ethereum Sepolia|[0x0000000000749f588c82E9cd5A67C91314e56458](https://sepolia.etherscan.io/address/0x0000000000749f588c82E9cd5A67C91314e56458)|
+
+## Testnet PFP Contract
+
+|Collection|Address|
+|---|---|
+|WrappedPunks|[0x000000A396A2c3b4a423D60AF6d3e84d950A7442](https://sepolia.etherscan.io/address/0x000000A396A2c3b4a423D60AF6d3e84d950A7442)|
+
+
 
 If you'd like to get the Primary PFP on another EVM chain, feel free to submit an issue here.
