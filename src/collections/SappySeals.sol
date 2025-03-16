@@ -5,8 +5,8 @@ import {TestPFP} from "src/TestPFP.sol";
 import {Initializable} from "lib/openzeppelin-contracts/contracts/proxy/utils/Initializable.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 
-contract WrappedCryptopunks is TestPFP, Initializable {
-    constructor() TestPFP("Wrapped Cryptopunks", "WPUNKS") {
+contract SappySeals is TestPFP, Initializable {
+    constructor() TestPFP("Sappy Seals", "SAPS") {
         transferOwnership(tx.origin);
     }
 

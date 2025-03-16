@@ -13,24 +13,18 @@ import {Ownable} from "../lib/openzeppelin-contracts/contracts/access/Ownable.so
  * @title Set primary PFP by binding a PFP to an address like primary ENS.
  *
  */
-
 interface DelegateCashInterface {
     function checkDelegateForAll(address delegate, address vault, bytes32 rights) external view returns (bool);
 
-    function checkDelegateForContract(
-        address delegate,
-        address vault,
-        address contract_,
-        bytes32 rights
-    ) external view returns (bool);
+    function checkDelegateForContract(address delegate, address vault, address contract_, bytes32 rights)
+        external
+        view
+        returns (bool);
 
-    function checkDelegateForERC721(
-        address delegate,
-        address vault,
-        address contract_,
-        uint256 tokenId,
-        bytes32 rights
-    ) external view returns (bool);
+    function checkDelegateForERC721(address delegate, address vault, address contract_, uint256 tokenId, bytes32 rights)
+        external
+        view
+        returns (bool);
 }
 
 contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerification, Ownable, ERC165, Initializable {
@@ -117,7 +111,7 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
     function getPrimaries(address[] calldata addrs) external view returns (PFP[] memory) {
         uint256 length = addrs.length;
         PFP[] memory result = new PFP[](length);
-        for (uint256 i; i < length; ) {
+        for (uint256 i; i < length;) {
             result[i] = primaryPFPs[addrs[i]];
             unchecked {
                 ++i;
@@ -160,9 +154,8 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
     }
 
     function hasCollectionPrimary(address addr, address contract_) external view override returns (bool) {
-        return
-            collectionPrimaryPFPs[addr][contract_] != 0 ||
-            collectionPrimaryPFPIdZero[_collectionPFPKey(addr, contract_)];
+        return collectionPrimaryPFPs[addr][contract_] != 0
+            || collectionPrimaryPFPIdZero[_collectionPFPKey(addr, contract_)];
     }
 
     function getCollectionPrimary(address addr, address contact_) external view override returns (uint256) {
@@ -171,8 +164,8 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
 
     // Collection verification functions
     function addVerification(address[] calldata contracts) external override onlyOwner {
-        uint contractsLength = contracts.length;
-        for (uint i = 0; i < contractsLength; i++) {
+        uint256 contractsLength = contracts.length;
+        for (uint256 i = 0; i < contractsLength; i++) {
             address contract_ = contracts[i];
             verifications[contract_] = true;
             emit CollectionVerified(contract_);
@@ -180,8 +173,8 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
     }
 
     function removeVerification(address[] calldata contracts) external override onlyOwner {
-        uint contractsLength = contracts.length;
-        for (uint i = 0; i < contractsLength; i++) {
+        uint256 contractsLength = contracts.length;
+        for (uint256 i = 0; i < contractsLength; i++) {
             address contract_ = contracts[i];
             verifications[contract_] = false;
             emit CollectionVerificationRemoved(contract_);
@@ -204,9 +197,11 @@ contract PrimaryPFP is IPrimaryPFP, ICollectionPrimaryPFP, ICollectionVerificati
     function _setPrimaryByDelegateCash(address contract_, uint256 tokenId, bool isCollection) internal {
         address tokenOwner = IERC721(contract_).ownerOf(tokenId);
         if (
-            !(dc.checkDelegateForERC721(msg.sender, tokenOwner, contract_, tokenId, bytes32(0)) ||
-                dc.checkDelegateForContract(msg.sender, tokenOwner, contract_, bytes32(0)) ||
-                dc.checkDelegateForAll(msg.sender, tokenOwner, bytes32(0)))
+            !(
+                dc.checkDelegateForERC721(msg.sender, tokenOwner, contract_, tokenId, bytes32(0))
+                    || dc.checkDelegateForContract(msg.sender, tokenOwner, contract_, bytes32(0))
+                    || dc.checkDelegateForAll(msg.sender, tokenOwner, bytes32(0))
+            )
         ) {
             revert MsgSenderNotDelegated();
         }
