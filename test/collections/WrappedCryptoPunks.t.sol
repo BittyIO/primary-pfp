@@ -8,7 +8,7 @@ import "src/collections/WrappedCryptoPunks.sol";
 
 contract WrappedPunksTest is Test {
     WrappedCryptopunks public punks;
-    
+
     function setUp() public {
         punks = new WrappedCryptopunks();
     }
@@ -20,13 +20,12 @@ contract WrappedPunksTest is Test {
 
     function testGetTokenURI() public {
         punks.initialize("https://wrappedpunks.com:3000/api/punks/metadata/");
-        punks.mintNext();  
-	assertEq(punks.tokenURI(1), "https://wrappedpunks.com:3000/api/punks/metadata/1");
+        punks.mintNext();
+        assertEq(punks.tokenURI(1), "https://wrappedpunks.com:3000/api/punks/metadata/1");
     }
 
     function testGetWrappedPunkInitHash() public view {
         bytes memory initCode = type(WrappedCryptopunks).creationCode;
         console.logBytes32(keccak256(initCode));
     }
-    
 }

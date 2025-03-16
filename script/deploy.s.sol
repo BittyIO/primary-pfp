@@ -28,7 +28,7 @@ contract Deploy is Script {
         address primaryPFPAddress = factory.safeCreate2(salt, initCode);
         PrimaryPFP primaryPFP = PrimaryPFP(primaryPFPAddress);
         console2.log(address(primaryPFP));
-	
+
         vm.stopBroadcast();
     }
 }
