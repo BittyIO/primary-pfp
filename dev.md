@@ -55,6 +55,9 @@ forge verify-check {id} \
 
 
 ## Finalized Deployment
+|Mainnet Chain|Address|
+|---|---|
+|Ethereum Mainnet|[0x0000000000749f588c82E9cd5A67C91314e56458](https://etherscan.io/address/0x0000000000749f588c82E9cd5A67C91314e56458)|
 
 |Testnet Chain|Address|
 |---|---|
