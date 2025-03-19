@@ -23,7 +23,7 @@ install [prettier-solidity](https://github.com/prettier-solidity/prettier-plugin
 npx prettier --write --plugin=prettier-plugin-solidity 'src/**/*.sol' 'test/**/*.sol'
 ```
 
-- get salt by [create2crunch](https://github.com/0age/create2crunch) and change it in [deploy script](https://github.com/BittyIO/Primary-PFP/blob/main/script/deploy.s.sol#L23)
+- get salt by [create2crunch](https://github.com/BittyIO/create2crunch) and change it in [deploy script](https://github.com/BittyIO/Primary-PFP/blob/main/script/deploy.s.sol#L23)
 
 
 - deploy and verify in etherscan
