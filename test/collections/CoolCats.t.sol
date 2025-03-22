@@ -15,13 +15,13 @@ contract CoolCatsTest is Test {
 
     function testGetBaseURI() public {
         cats.initialize("https://api.coolcats.com/cat/");
-        assertEq(cats.getBaseURI(), "https://api.coolcats.com/cat/");
+        assertEq(cats.getBaseURI(), "https://api.coolcatsnft.com/cat/");
     }
 
     function testGetTokenURI() public {
         cats.initialize("https://api.coolcats.com/cat/");
         cats.mintNext();
-        assertEq(cats.tokenURI(1), "https://api.coolcats.com/cat/1");
+        assertEq(cats.tokenURI(1), "https://api.coolcatsnft.com/cat/");
     }
 
     function testGetCoolCatsInitHash() public view {
