@@ -21,7 +21,7 @@ interface ImmutableCreate2Factory {
 contract Deploy is Script {
     ImmutableCreate2Factory immutable factory = ImmutableCreate2Factory(0x0000000000FFe8B47B3e2130213B802212439497);
     bytes initCode = type(CoolCats).creationCode;
-    bytes32 salt = 0x00000000000000000000000000000000000000001f1bc3c8a9c1700000289c33;
+    bytes32 salt = 0x0000000000000000000000000000000000000000ae8f0eb3243120000013c7dc;
 
     function run() external {
         vm.startBroadcast();
