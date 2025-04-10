@@ -25,6 +25,8 @@ PFP Images can be copied, two different collections can have the same ids and im
 | [Sappy Seals](https://www.sappy.lol) | [0x364C828eE171616a39897688A831c2499aD972ec](https://etherscan.io/address/0x364C828eE171616a39897688A831c2499aD972ec) | [0x0000002a98299347F7B2F0fE1bCAc8C45c1c2B80](https://sepolia.etherscan.io/address/0x0000002a98299347F7B2F0fE1bCAc8C45c1c2B80) |
 | [Cool Cats](https://coolcats.com) | [0x1a92f7381b9f03921564a437210bb9396471050c](https://etherscan.io/address/0x1a92f7381b9f03921564a437210bb9396471050c) | [0x00000008A978Ad20d87c7D2E6ba643890462fF81](https://sepolia.etherscan.io/address/0x00000008A978Ad20d87c7D2E6ba643890462fF81) |
 | [Nakamigos](https://nakamigos.io) | [0xd774557b647330C91Bf44cfEAB205095f7E6c367](https://etherscan.io/address/0xd774557b647330C91Bf44cfEAB205095f7E6c367) | [0x00000005c7097e9cb9e7af38f4dc76bf706bfe6b](https://sepolia.etherscan.io/address/0x00000005c7097e9cb9e7af38f4dc76bf706bfe6b) |
+| [Rektguy](https://www.rektguy.com) | [0xb852c6b5892256c264cc2c888ea462189154d8d7](https://etherscan.io/address/0xb852c6b5892256c264cc2c888ea462189154d8d7) | [0x0000114D5C9E4700FB968486610C00F0d2f07000](https://sepolia.etherscan.io/address/0x0000114D5C9E4700FB968486610C00F0d2f07000) |
+
 
 ## Verified PFP collections for Ordinals
 | Collection |
