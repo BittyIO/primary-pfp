@@ -27,6 +27,7 @@ PFP Images can be copied, two different collections can have the same ids and im
 | [Nakamigos](https://nakamigos.io) | [0xd774557b647330C91Bf44cfEAB205095f7E6c367](https://etherscan.io/address/0xd774557b647330C91Bf44cfEAB205095f7E6c367) | [0x00000005c7097e9cb9e7af38f4dc76bf706bfe6b](https://sepolia.etherscan.io/address/0x00000005c7097e9cb9e7af38f4dc76bf706bfe6b) |
 | [Moonbrids](https://www.proof.xyz/moonbirds) | [0x23581767a106ae21c074b2276d25e5c3e136a68b](https://etherscan.io/address/0x23581767a106ae21c074b2276d25e5c3e136a68b) | [0x00000053551006776eEC9b448154090DaFB68461](https://sepolia.etherscan.io/address/0x00000053551006776eEC9b448154090DaFB68461) |
 | [TestNFT](https://bitty.io) | [0x0000Fe4C00AB4e80340CdDD7c9005200e70BE9f4](https://etherscan.io/address/0x0000Fe4C00AB4e80340CdDD7c9005200e70BE9f4) | [0x0000Fe4C00AB4e80340CdDD7c9005200e70BE9f4](https://sepolia.etherscan.io/address/0x0000Fe4C00AB4e80340CdDD7c9005200e70BE9f4) |
+| [MoonCats](https://mooncatrescue.com) | [0xc3f733ca98e0dad0386979eb96fb1722a1a05e69](https://etherscan.io/address/0xc3f733ca98e0dad0386979eb96fb1722a1a05e69) | [0x00000700113aCd61CABaa64B0F8c1A86002000e5](https://sepolia.etherscan.io/address/0x00000700113aCd61CABaa64B0F8c1A86002000e5) |
 
 ## Verified PFP collections for Ordinals
 | Collection |
